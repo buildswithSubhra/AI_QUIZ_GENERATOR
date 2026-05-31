@@ -31,12 +31,6 @@ A modern AI-powered Quiz Generator that allows users to create interactive quizz
 
 ---
 
-## 📸 Preview
-
-![Quiz Generator Preview](https://via.placeholder.com/1200x600?text=Quiz+Generator)
-
----
-
 ## 🚀 Getting Started
 
 ### Clone the Repository
