@@ -1,21 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { UserButton, useUser } from '@clerk/clerk-react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 import { motion } from 'framer-motion';
-import { Cpu, FileText, Layout } from 'lucide-react';
+import { Cpu, FileText, LogOut } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user } = useUser();
+  const user = auth.currentUser;
+  const displayName = user?.email?.split('@')[0] || 'INITIATE';
+
+  const handleSignOut = async () => {
+    await signOut(auth);
+  };
 
   return (
     <div className="container">
-      <nav style={{ 
-        position: 'fixed', 
-        top: 0, 
-        width: '100%', 
-        padding: '1.5rem 2rem', 
-        display: 'flex', 
-        justifyContent: 'space-between', 
+      <nav style={{
+        position: 'fixed',
+        top: 0,
+        width: '100%',
+        padding: '1.5rem 2rem',
+        display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         background: 'rgba(5, 5, 5, 0.8)',
         backdropFilter: 'blur(10px)',
@@ -23,25 +29,39 @@ const Dashboard = () => {
         zIndex: 100
       }}>
         <h2 className="orbitron gradient-text" style={{ fontSize: '1.2rem' }}>NEURAL DASH</h2>
-        <UserButton afterSignOutUrl="/" />
+        <button
+          onClick={handleSignOut}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-dim)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            fontSize: '0.9rem'
+          }}
+        >
+          <LogOut size={18} /> SIGN OUT
+        </button>
       </nav>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
         style={{ textAlign: 'center', marginTop: '4rem' }}
       >
         <h1 className="orbitron" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
-          WELCOME, <span className="gradient-text">{user?.firstName || 'INITIATE'}</span>
+          WELCOME, <span className="gradient-text">{displayName.toUpperCase()}</span>
         </h1>
         <p style={{ color: 'var(--text-dim)', marginBottom: '3rem' }}>SELECT YOUR KNOWLEDGE EXTRACTION METHOD</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', maxWidth: '800px' }}>
           <Link to="/topic-quiz" style={{ textDecoration: 'none' }}>
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05, boxShadow: '0 0 30px var(--primary-glow)' }}
-              className="glass-card" 
+              className="glass-card"
               style={{ padding: '2rem', height: '100%' }}
             >
               <Cpu size={48} color="var(--primary)" style={{ marginBottom: '1.5rem' }} />
@@ -52,9 +72,9 @@ const Dashboard = () => {
           </Link>
 
           <Link to="/dataset-quiz" style={{ textDecoration: 'none' }}>
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05, boxShadow: '0 0 30px var(--secondary-glow)' }}
-              className="glass-card" 
+              className="glass-card"
               style={{ padding: '2rem', height: '100%' }}
             >
               <FileText size={48} color="var(--secondary)" style={{ marginBottom: '1.5rem' }} />
